@@ -1,8 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
-using PokeApi.Interfaces;
-using PokeApi.Middlewares;
-using PokeApi.Services;
-using System.Globalization;
+using HeroesApi.Interfaces;
+using HeroesApi.Services;
+using HeroesApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,21 +61,14 @@ app.UseAuthorization();
 app.MapControllers();
 
 //Middleware inline
-/*
 app.Use(async (context, next) =>
 {
-    var cultureQuery = context.Request.Query["culture"];
-    if(!string.IsNullOrEmpty(cultureQuery))
-    {
-        var culture = new CultureInfo(cultureQuery!);
-        CultureInfo.CurrentCulture = culture;
-        CultureInfo.CurrentUICulture = culture;
-    }
-
+   var port = context.Connection.LocalPort;
+    Console.WriteLine(port);
     await next(context);
-});*/
+});
 
-app.MapGet("/test", () =>Results.Ok("Success")) ;
+app.MapGet("/", () =>Results.Ok($"Api Listening...")) ;
 
 /*app.Run(context=>
 {

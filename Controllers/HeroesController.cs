@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using HeroesApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol;
-using PokeApi.Models;
 
-namespace PokeApi.Controllers
+namespace HeroesApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -18,15 +16,16 @@ namespace PokeApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Heroes>>> GetHeroes(){
-          
+        public async Task<ActionResult<IEnumerable<Heroes>>> GetHeroes()
+        {
+
             var heroes = await _context.Heroes.ToListAsync();
             return Ok(heroes);
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<Heroes>> GetHeroById(string id)
         {
-           var hero = await _context.Heroes.FindAsync(id);
+            var hero = await _context.Heroes.FindAsync(id);
             if (hero == null)
             {
                 return NotFound();

@@ -1,5 +1,5 @@
 ﻿
-namespace PokeApi.Middlewares
+namespace HeroesApi.Middlewares
 {
     public  class ApplicationJsonMiddleware
     {
@@ -22,7 +22,7 @@ namespace PokeApi.Middlewares
             context.Response.OnStarting(state =>
             {
                 var httpContext = (HttpContext)state;
-                httpContext.Response.Headers.Append("token-test", Guid.NewGuid().ToString().ToUpper());
+                httpContext.Response.Headers.Append("token-test", Guid.NewGuid().ToString();
                 return Task.CompletedTask;
             }, context);
 

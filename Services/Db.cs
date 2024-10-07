@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PokeApi.Models;
+﻿using HeroesApi.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace PokeApi.Services
+namespace HeroesApi.Services
 {
     public static class Db
     {
