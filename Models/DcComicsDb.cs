@@ -1,0 +1,12 @@
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace PokeApi.Models
+{
+    public class DcComicsDb:DbContext
+    {
+        public DcComicsDb(DbContextOptions<DcComicsDb> options):base(options) { }
+     
+        public DbSet<Heroes> Heroes { get; set; }
+        public DbSet<Users> Users { get; set; }
+    }
+}
