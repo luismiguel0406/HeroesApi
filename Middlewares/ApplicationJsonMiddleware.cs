@@ -14,9 +14,7 @@ namespace HeroesApi.Middlewares
         {
             if (!context.Request.HasJsonContentType())
             {
-                context.Request.Headers.ContentType = "application/json";
-                context.Request.Headers["token-test"] = Guid.NewGuid().ToString();
-              
+                context.Request.Headers.Accept = "application/json";              
             }
 
             context.Response.OnStarting(state =>

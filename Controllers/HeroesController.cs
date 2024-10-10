@@ -32,6 +32,14 @@ namespace HeroesApi.Controllers
             }
             return Ok(hero);
         }
+        [HttpGet("suggest")]
+        public async Task<ActionResult<IEnumerable<Heroes>>> GetSuggestion( string suggestion)
+        {
+            var query = await _context.Heroes.Where(heroes => heroes.Superhero.Contains(suggestion)).ToListAsync();
+            if(query.Count == 0) return NotFound();
+            return Ok(query);
+           
+        }
 
     }
 }
