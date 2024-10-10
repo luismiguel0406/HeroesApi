@@ -1,4 +1,5 @@
-﻿using HeroesApi.Models;
+﻿using HeroesApi.Interfaces;
+using HeroesApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,24 +9,26 @@ namespace HeroesApi.Controllers
     [ApiController]
     public class HeroesController : ControllerBase
     {
-        private readonly DcComicsDb _context;
+        private readonly IHeroRepository _heroRepository;
 
-        public HeroesController(DcComicsDb context)
+        public HeroesController(IHeroRepository heroRepository)
         {
-            _context = context;
+            _heroRepository = heroRepository;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Heroes>>> GetHeroes()
         {
-
-            var heroes = await _context.Heroes.ToListAsync();
+          var heroes =  await _heroRepository.GetHeroes();
+            if (heroes == null) {
+                NotFound();
+            }
             return Ok(heroes);
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<Heroes>> GetHeroById(string id)
         {
-            var hero = await _context.Heroes.FindAsync(id);
+            var hero = await _heroRepository.GetHeroById(id);
             if (hero == null)
             {
                 return NotFound();
@@ -35,10 +38,12 @@ namespace HeroesApi.Controllers
         [HttpGet("suggest")]
         public async Task<ActionResult<IEnumerable<Heroes>>> GetSuggestion( string suggestion)
         {
-            var query = await _context.Heroes.Where(heroes => heroes.Superhero.Contains(suggestion)).ToListAsync();
-            if(query.Count == 0) return NotFound();
-            return Ok(query);
-           
+            var suggest = await _heroRepository.GetSuggestion(suggestion);
+            if (!suggest.Any())
+            {
+                return NotFound();
+            }
+            return Ok(suggest);
         }
 
     }

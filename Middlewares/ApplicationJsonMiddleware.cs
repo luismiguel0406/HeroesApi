@@ -14,7 +14,7 @@ namespace HeroesApi.Middlewares
         {
             if (!context.Request.HasJsonContentType())
             {
-                context.Request.Headers.Accept = "application/json";              
+                context.Request.Headers.ContentType = "application/json";              
             }
 
             context.Response.OnStarting(state =>

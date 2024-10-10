@@ -1,6 +1,7 @@
 using HeroesApi.Interfaces;
 using HeroesApi.Services;
 using HeroesApi.Middlewares;
+using HeroesApi.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,7 @@ builder.Services.DbConecctionService(builder);
 //DI
 builder.Services.AddScoped<IElement, ElementTeller>();
 builder.Services.AddKeyedScoped<IElement, ElementTeller>("Teller");
+builder.Services.AddScoped<IHeroRepository, HeroesRepository>();
 
 
 var app = builder.Build();
