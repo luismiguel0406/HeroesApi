@@ -30,8 +30,6 @@ builder.Services.AddCors(cors =>
 builder.Services.DbConecctionService(builder);
 
 //DI
-builder.Services.AddScoped<IElement, ElementTeller>();
-builder.Services.AddKeyedScoped<IElement, ElementTeller>("Teller");
 builder.Services.AddScoped<IHeroRepository, HeroesRepository>();
 
 

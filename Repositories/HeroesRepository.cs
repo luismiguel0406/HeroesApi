@@ -3,6 +3,7 @@ using HeroesApi.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data.SqlTypes;
 
 namespace HeroesApi.Repositories
 {
@@ -20,14 +21,14 @@ namespace HeroesApi.Repositories
 
         public async Task<Heroes> GetHeroById( string id)
         {
-            var hero = await _context.Heroes.FindAsync(id);        
-            return hero;
+            var hero = await _context.Heroes.SingleAsync(hero=>hero.Id == id);
+            return hero;   
         }
 
         public async Task<IEnumerable<Heroes>> GetSuggestion(string suggestion)
         {
-            var query = await _context.Heroes.Where(heroes => heroes.Superhero.Contains(suggestion)).ToListAsync();
-            return query;
+            return await _context.Heroes.Where(heroes => heroes.Superhero.Contains(suggestion)).ToListAsync();
+           
         }
 
     }
