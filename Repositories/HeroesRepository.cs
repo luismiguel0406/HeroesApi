@@ -1,9 +1,6 @@
 ﻿using HeroesApi.Interfaces;
 using HeroesApi.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Data.SqlTypes;
 
 namespace HeroesApi.Repositories
 {
@@ -15,14 +12,13 @@ namespace HeroesApi.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Heroes>> GetHeroes() {
-            return  await _context.Heroes.ToListAsync();
+        public async Task<IEnumerable<Heroes>> GetAll() {
+            return  await _context.Heroes.AsNoTracking().ToListAsync();
         }
 
-        public async Task<Heroes> GetHeroById( string id)
+        public async Task<Heroes> GetById( string id)
         {
-            var hero = await _context.Heroes.SingleAsync(hero=>hero.Id == id);
-            return hero;   
+            return  await _context.Heroes.SingleAsync(hero=>hero.Id == id);  
         }
 
         public async Task<IEnumerable<Heroes>> GetSuggestion(string suggestion)

@@ -1,7 +1,6 @@
 ﻿using HeroesApi.Interfaces;
 using HeroesApi.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace HeroesApi.Controllers
 {
@@ -17,18 +16,18 @@ namespace HeroesApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Heroes>>> GetHeroes()
+        public async Task<ActionResult<IEnumerable<Heroes>>> GetAll()
         {
-          var heroes =  await _heroRepository.GetHeroes();
+          var heroes =  await _heroRepository.GetAll();
             if (heroes == null) {
                 NotFound();
             }
             return Ok(heroes);
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<Heroes>> GetHeroById(string id)
+        public async Task<ActionResult<Heroes>> GetById(string id)
         {
-            var hero = await _heroRepository.GetHeroById(id);
+            var hero = await _heroRepository.GetById(id);
             if (hero == null)
             {
                 return NotFound();
