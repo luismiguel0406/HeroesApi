@@ -31,6 +31,7 @@ builder.Services.DbConecctionService(builder);
 
 //DI
 builder.Services.AddScoped<IHeroRepository, HeroesRepository>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
 
 var app = builder.Build();

@@ -1,6 +1,8 @@
 ﻿using HeroesApi.Interfaces;
 using HeroesApi.Models;
+using HeroesApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HeroesApi.Controllers
 {
