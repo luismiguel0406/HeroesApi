@@ -27,5 +27,27 @@ namespace HeroesApi.Repositories
            
         }
 
+        public void Add(Heroes hero)
+        {
+              _context.Heroes.Add(hero);
+        }
+
+        public void Delete(string id)
+        {
+           var hero = _context.Heroes.Find(id);
+            if (hero != null) { 
+            _context.Heroes.Update(hero);          
+            }
+            return;
+        }
+
+        public void Update(Heroes hero) { 
+            _context.Heroes.Update(hero);
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
     }
 }

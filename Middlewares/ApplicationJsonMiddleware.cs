@@ -1,16 +1,9 @@
 ﻿
 namespace HeroesApi.Middlewares
 {
-    public  class ApplicationJsonMiddleware
+    public  class ApplicationJsonMiddleware:IMiddleware
     {
-        private readonly RequestDelegate _next;
-
-        public ApplicationJsonMiddleware(RequestDelegate next)
-        {
-            _next = next;
-        }
-
-        public async Task InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context, RequestDelegate _next)
         {
             if (!context.Request.HasJsonContentType())
             {

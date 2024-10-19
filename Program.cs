@@ -2,6 +2,7 @@ using HeroesApi.Interfaces;
 using HeroesApi.Services;
 using HeroesApi.Middlewares;
 using HeroesApi.Repositories;
+using System.Security.Cryptography.X509Certificates;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,8 +34,24 @@ builder.Services.DbConecctionService(builder);
 builder.Services.AddScoped<IHeroRepository, HeroesRepository>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
+//Factory MiddleWares
+builder.Services.AddTransient<ApplicationJsonMiddleware>();
+
+//Certificates
+/*builder.WebHost.ConfigureKestrel(kestrelOptions =>
+{
+    kestrelOptions.ConfigureHttpsDefaults(httpsConfig =>
+    {
+        var certPath = Path.Combine(builder.Environment.ContentRootPath, "cert.pem");
+        var keyPath = Path.Combine(builder.Environment.ContentRootPath, "key.pem");
+
+        httpsConfig.ServerCertificate = X509Certificate2.CreateFromPemFile(certPath, keyPath);
+    });
+});*/
 
 var app = builder.Build();
+
+//app.Urls.Add("https://localhost:3000");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -69,7 +86,7 @@ app.Use(async (context, next) =>
     await next(context);
 });
 
-app.MapGet("/", () =>Results.Ok($"Api Listening...")) ;
+app.MapGet("/", () =>Results.Ok($"Api Listening...,{builder.Configuration.GetValue<string>("portTest")}")) ;
 
 /*app.Run(context=>
 {

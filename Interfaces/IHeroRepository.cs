@@ -9,5 +9,13 @@ namespace HeroesApi.Interfaces
         Task<Heroes> GetById(string id);
 
         Task<IEnumerable<Heroes>> GetSuggestion( string suggestion);
+
+        void Add(Heroes heroes);
+
+        void Update(Heroes heroes);
+
+        void Delete(string id);  
+        
+        Task SaveChangesAsync();
     }
 }

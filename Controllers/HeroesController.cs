@@ -1,8 +1,6 @@
 ﻿using HeroesApi.Interfaces;
 using HeroesApi.Models;
-using HeroesApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace HeroesApi.Controllers
 {
@@ -47,5 +45,33 @@ namespace HeroesApi.Controllers
             return Ok(suggest);
         }
 
+        [HttpPost]
+        public async Task<ActionResult> Add(Heroes hero)
+        {
+             _heroRepository.Add(hero);
+            await _heroRepository.SaveChangesAsync();
+            return Created();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete (string id)
+        {
+            if(string.IsNullOrEmpty(id))
+            {
+                return BadRequest("Id is required");
+            }
+
+            _heroRepository.Delete(id);
+            await _heroRepository.SaveChangesAsync();
+            return NoContent();
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> Update(Heroes hero)
+        {
+             _heroRepository.Update(hero);
+            await _heroRepository.SaveChangesAsync();
+            return NoContent();
+        }   
     }
 }
