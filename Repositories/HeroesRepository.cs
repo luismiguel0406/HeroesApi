@@ -13,12 +13,16 @@ namespace HeroesApi.Repositories
         }
 
         public async Task<IEnumerable<Heroes>> GetAll() {
-            return  await _context.Heroes.AsNoTracking().ToListAsync();
+            var heroes = await _context.Heroes.AsNoTracking().ToListAsync();
+            var query = from resultHeroes in heroes
+                        where resultHeroes.IsActive
+                        select resultHeroes;
+            return query;
         }
 
         public async Task<Heroes> GetById( string id)
         {
-            return  await _context.Heroes.SingleAsync(hero=>hero.Id == id);  
+            return  await _context.Heroes.SingleAsync(hero=>hero.Id == id && hero.IsActive);  
         }
 
         public async Task<IEnumerable<Heroes>> GetSuggestion(string suggestion)
