@@ -8,7 +8,7 @@
         public required string AlterEgo { get; set; }
         public required string FirstAppearance { get; set; }
         public required string Characters { get; set; }
-
+        public required string ?ImageUrl  { get; set; }
         public required bool IsActive { get; set; }
     }
 }
