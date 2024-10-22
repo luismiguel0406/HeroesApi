@@ -61,15 +61,15 @@ namespace HeroesApi.Controllers
                 return BadRequest("Id is required");
             }
 
-            _heroRepository.Delete(id);
+            await _heroRepository.Delete(id);
             await _heroRepository.SaveChangesAsync();
             return NoContent();
         }
 
-        [HttpPut]
-        public async Task<ActionResult> Update(Heroes hero)
+        [HttpPatch("{id}")]
+        public async Task<ActionResult> Update(string id,Heroes hero)
         {
-             _heroRepository.Update(hero);
+             _heroRepository.Update(id, hero); 
             await _heroRepository.SaveChangesAsync();
             return NoContent();
         }   

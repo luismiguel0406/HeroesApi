@@ -10,5 +10,10 @@
         public required string Characters { get; set; }
         public required string ?ImageUrl  { get; set; }
         public required bool IsActive { get; set; }
+
+        public Heroes()
+        {
+            IsActive = true;
+        }
     }
 }

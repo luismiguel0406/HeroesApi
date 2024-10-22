@@ -36,16 +36,17 @@ namespace HeroesApi.Repositories
               _context.Heroes.Add(hero);
         }
 
-        public void Delete(string id)
+        public async Task Delete(string id)
         {
-           var hero = _context.Heroes.Find(id);
-            if (hero != null) { 
-            _context.Heroes.Update(hero);          
-            }
-            return;
+           var hero = await _context.Heroes.FirstOrDefaultAsync(hero=> hero.Id == id);
+            if (hero == null) return;
+
+            hero.IsActive = false;
+           
         }
 
-        public void Update(Heroes hero) { 
+        public void Update(string id, Heroes hero) { 
+
             _context.Heroes.Update(hero);
         }
 
