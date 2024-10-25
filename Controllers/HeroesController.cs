@@ -66,10 +66,10 @@ namespace HeroesApi.Controllers
             return NoContent();
         }
 
-        [HttpPatch("{id}")]
+        [HttpPut("{id}")]
         public async Task<ActionResult> Update(string id,Heroes hero)
         {
-             _heroRepository.Update(id, hero); 
+            await _heroRepository.Update(id, hero); 
             await _heroRepository.SaveChangesAsync();
             return NoContent();
         }   

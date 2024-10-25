@@ -1,6 +1,7 @@
 ﻿using HeroesApi.Interfaces;
 using HeroesApi.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace HeroesApi.Repositories
 {
@@ -27,7 +28,9 @@ namespace HeroesApi.Repositories
 
         public async Task<IEnumerable<Heroes>> GetSuggestion(string suggestion)
         {
-            return await _context.Heroes.Where(heroes => heroes.Superhero.Contains(suggestion)).ToListAsync();
+            return await _context.Heroes
+                .Where(heroes => !string.IsNullOrEmpty(heroes.Superhero) && heroes.Superhero.Contains(suggestion) )
+                .ToListAsync();
            
         }
 
@@ -36,18 +39,22 @@ namespace HeroesApi.Repositories
               _context.Heroes.Add(hero);
         }
 
-        public async Task Delete(string id)
+        public async Task  Delete(string id)
         {
-           var hero = await _context.Heroes.FirstOrDefaultAsync(hero=> hero.Id == id);
-            if (hero == null) return;
-
-            hero.IsActive = false;
-           
+            await _context.Heroes.Where(heroes=>heroes.Id == id)
+                .ExecuteUpdateAsync(existingObject => existingObject
+                                   .SetProperty(property => property.IsActive , false));        
         }
+        public async Task Update(string id, Heroes hero) {
 
-        public void Update(string id, Heroes hero) { 
-
-            _context.Heroes.Update(hero);
+            await _context.Heroes.Where(heroes => heroes.Id == id)
+                         .ExecuteUpdateAsync(heroFound => heroFound
+                         .SetProperty(p => p.Superhero, hero.Superhero)
+                         .SetProperty(p => p.AlterEgo, hero.AlterEgo)
+                         .SetProperty(p => p.Publisher, hero.Publisher)
+                         .SetProperty(p => p.FirstAppearance, hero.FirstAppearance)
+                         .SetProperty(p => p.ImageUrl, hero.ImageUrl)
+                         .SetProperty(p => p.Characters, hero.Characters));               
         }
 
         public async Task SaveChangesAsync()

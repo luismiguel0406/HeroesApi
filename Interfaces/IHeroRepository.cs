@@ -12,7 +12,7 @@ namespace HeroesApi.Interfaces
 
         void Add(Heroes heroes);
 
-        void Update(string id, Heroes heroes);
+        Task Update(string id, Heroes heroes);
 
         Task Delete(string id);  
         

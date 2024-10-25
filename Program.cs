@@ -14,7 +14,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAuthentication();
-builder.Services.AddControllers();
 
 builder.Services.AddResponseCaching();
 
