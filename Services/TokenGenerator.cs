@@ -10,10 +10,10 @@ namespace HeroesApi.Services
     public class TokenGenerator : ITokenGererator
     {
 
-        public string GenerateToken(Users user)
+        public string GenerateToken(Users user, WebApplicationBuilder builder)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var secretKey = Guid.NewGuid().ToString().ToArray();
+            var secretKey = builder.Configuration.GetValue<string>("Token:SecretKey")!.ToArray();
 
             var claims = new List<Claim>
             {

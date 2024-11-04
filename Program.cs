@@ -2,7 +2,10 @@ using HeroesApi.Interfaces;
 using HeroesApi.Services;
 using HeroesApi.Middlewares;
 using HeroesApi.Repositories;
-using System.Security.Cryptography.X509Certificates;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using HeroesApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +16,23 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<string>("Token:SecretKey")!.ToArray())),
+            ValidIssuer = "http://localhost:5266",
+            ValidAudience = "http://localhost:4200",
+            ValidateLifetime = true,
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateIssuerSigningKey = true,
+
+        };
+    });
+    
 
 builder.Services.AddResponseCaching();
 
@@ -33,20 +52,11 @@ builder.Services.DbConecctionService(builder);
 builder.Services.AddScoped<IHeroRepository, HeroesRepository>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
+//DI Token Generator
+builder.Services.AddSingleton<TokenGenerator>();
+
 //Factory MiddleWares
 builder.Services.AddTransient<ApplicationJsonMiddleware>();
-
-//Certificates
-/*builder.WebHost.ConfigureKestrel(kestrelOptions =>
-{
-    kestrelOptions.ConfigureHttpsDefaults(httpsConfig =>
-    {
-        var certPath = Path.Combine(builder.Environment.ContentRootPath, "cert.pem");
-        var keyPath = Path.Combine(builder.Environment.ContentRootPath, "key.pem");
-
-        httpsConfig.ServerCertificate = X509Certificate2.CreateFromPemFile(certPath, keyPath);
-    });
-});*/
 
 var app = builder.Build();
 
@@ -75,6 +85,7 @@ app.UseResponseCaching();
 app.UseAuthentication();
 app.UseAuthorization();
 
+
 app.MapControllers();
 
 //Middleware inline
@@ -85,19 +96,10 @@ app.Use(async (context, next) =>
     await next(context);
 });
 
-app.MapGet("/", () =>Results.Ok($"Api Listening...,{builder.Configuration.GetValue<string>("portTest")}")) ;
-
-/*app.Run(context=>
+app.MapGet("/", () =>Results.Ok($"Api Listening...,{builder.Configuration.GetValue<string>("Token:SecretKey")}"));
+app.MapPost("/GetToken", (Users user, TokenGenerator tokengenerator) =>
 {
-    context.Response.StatusCode = 404;
-    return Task.CompletedTask;
+    return tokengenerator.GenerateToken(user, builder); 
 });
-
-*/
-/*app.Run(async (context) =>
-{
-    await context.Response.WriteAsync($"CurrentCulture.DisplayName: {CultureInfo.CurrentCulture.DisplayName}");
-        
-});*/
 
 app.Run();

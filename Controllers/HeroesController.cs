@@ -1,11 +1,13 @@
 ﻿using HeroesApi.Interfaces;
 using HeroesApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HeroesApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class HeroesController : ControllerBase
     {
         private readonly IHeroRepository _heroRepository;
