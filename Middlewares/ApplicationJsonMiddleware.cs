@@ -13,7 +13,7 @@ namespace HeroesApi.Middlewares
             context.Response.OnStarting(state =>
             {
                 var httpContext = (HttpContext)state;
-                httpContext.Response.Headers.Append("token-test", Guid.NewGuid().ToString());
+                httpContext.Response.Headers.Append("Authorization-test", Guid.NewGuid().ToString());
                 return Task.CompletedTask;
             }, context);
 
