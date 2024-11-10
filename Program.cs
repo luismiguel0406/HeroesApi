@@ -1,7 +1,6 @@
-using HeroesApi.Interfaces;
+
 using HeroesApi.Services;
 using HeroesApi.Middlewares;
-using HeroesApi.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -47,12 +46,7 @@ builder.Services.AddCors(cors =>
 
 //DB
 builder.Services.DbConecctionService(builder);
-
-//DI
-builder.Services.AddScoped<IHeroRepository, HeroesRepository>();
-builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
-
-//DI Token Generator
+builder.Services.MyCustomServices();
 builder.Services.AddSingleton<TokenGenerator>();
 
 //Factory MiddleWares
@@ -69,7 +63,10 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(ui =>
+    {
+        ui.InjectStylesheet("/swaggerUi/SwaggerDark.css");
+    });
 }
 
 
@@ -85,7 +82,6 @@ app.UseResponseCaching();
 app.UseAuthentication();
 app.UseAuthorization();
 
-
 app.MapControllers();
 
 //Middleware inline
@@ -96,10 +92,9 @@ app.Use(async (context, next) =>
     await next(context);
 });
 
-app.MapGet("/", () =>Results.Ok($"Api Listening...,{builder.Configuration.GetValue<string>("Token:SecretKey")}"));
 app.MapPost("/GetToken", (Users user, TokenGenerator tokengenerator) =>
 {
-    return tokengenerator.GenerateToken(user, builder); 
+    return tokengenerator.GenerateToken(user, builder.Configuration); 
 });
 
 app.Run();

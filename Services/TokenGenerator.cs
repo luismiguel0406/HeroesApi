@@ -7,18 +7,17 @@ using System.Text;
 
 namespace HeroesApi.Services
 {
-    public class TokenGenerator : ITokenGererator
+    public class TokenGenerator : ITokenGenerator
     {
-
-        public string GenerateToken(Users user, WebApplicationBuilder builder)
+        public string GenerateToken(Users user, IConfiguration configuration)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var secretKey = builder.Configuration.GetValue<string>("Token:SecretKey")!.ToArray();
+            var secretKey = configuration.GetValue<string>("Token:SecretKey")!.ToArray();
 
             var claims = new List<Claim>
             {
                 new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new (JwtRegisteredClaimNames.Sub, user.User),
+                new (JwtRegisteredClaimNames.Sub, user.Username),
                 new (JwtRegisteredClaimNames.Email, user.Email)
             };
 
@@ -34,7 +33,7 @@ namespace HeroesApi.Services
                                                 SecurityAlgorithms.HmacSha256Signature)
             };
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var token =  tokenHandler.CreateToken(tokenDescriptor);           
             return tokenHandler.WriteToken(token);
         }
     }

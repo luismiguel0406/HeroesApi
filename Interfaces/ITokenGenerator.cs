@@ -2,8 +2,8 @@
 
 namespace HeroesApi.Interfaces
 {
-    public interface ITokenGererator
+    public interface ITokenGenerator
     {
-        string GenerateToken(Users user, WebApplicationBuilder builder);
+        string GenerateToken(Users user, IConfiguration configuration);
     }
 }
