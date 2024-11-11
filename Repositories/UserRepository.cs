@@ -11,9 +11,11 @@ namespace HeroesApi.Repositories
         {
             _context = context;
         }
-        public async Task Login(string username, string password)
+        public async Task<Users?> Login(Users user)
         {
-            throw new NotImplementedException();
+             return await _context.Users
+            .Where(u => u.Username == user.Username && u.Password == user.Password)
+            .FirstOrDefaultAsync();       
         }
 
         public Task Logout(string username)
@@ -23,7 +25,7 @@ namespace HeroesApi.Repositories
 
         public async Task Register(Users user)
         {
-            var ExistUser = await _context.Users.AllAsync(u=>u.Username == user.Username);
+            var ExistUser = await _context.Users.AnyAsync(u=>u.Username == user.Username);
             if (ExistUser) return;
                _context.Users.Add(user);
             

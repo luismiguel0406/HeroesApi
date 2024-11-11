@@ -9,15 +9,6 @@ namespace HeroesApi.Middlewares
             {
                 context.Request.Headers.ContentType = "application/json";              
             }
-
-            context.Response.OnStarting(state =>
-            {
-                var httpContext = (HttpContext)state;
-                httpContext.Response.Headers.Append("Authorization-test", Guid.NewGuid().ToString());
-                return Task.CompletedTask;
-            }, context);
-
-
             await _next(context);
         }
 

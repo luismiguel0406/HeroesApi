@@ -1,7 +1,6 @@
 ﻿using HeroesApi.Interfaces;
 using HeroesApi.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace HeroesApi.Repositories
 {
@@ -28,10 +27,10 @@ namespace HeroesApi.Repositories
 
         public async Task<IEnumerable<Heroes>> GetSuggestion(string suggestion)
         {
-            return await _context.Heroes
+                 return await _context.Heroes
                 .Where(heroes => !string.IsNullOrEmpty(heroes.Superhero) && heroes.Superhero.Contains(suggestion) )
                 .ToListAsync();
-           
+    
         }
 
         public void Add(Heroes hero)

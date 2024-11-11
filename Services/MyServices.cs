@@ -1,5 +1,6 @@
 ﻿using HeroesApi.Interfaces;
 using HeroesApi.Repositories;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace HeroesApi.Services
 {

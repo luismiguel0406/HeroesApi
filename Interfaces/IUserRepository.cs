@@ -4,11 +4,12 @@ namespace HeroesApi.Interfaces
 {
     public interface IUserRepository
     {
-        Task Login(string username, string password);
+        Task<Users?> Login(Users user);
         Task Logout( string username);
 
         Task Register(Users user);
 
+        Task SaveChangesAsync();
 
     }
 }

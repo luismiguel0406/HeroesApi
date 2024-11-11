@@ -4,7 +4,8 @@ using HeroesApi.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using HeroesApi.Models;
+using Microsoft.OpenApi.Models;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,12 +14,37 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name ="Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme ="bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Introduce your token like this 'Bearer token'"
+    });
 
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
+});
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
-    {
+    {   
         options.TokenValidationParameters = new TokenValidationParameters
         {
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<string>("Token:SecretKey")!.ToArray())),
@@ -31,7 +57,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
         };
     });
-    
+
 
 builder.Services.AddResponseCaching();
 
@@ -47,7 +73,7 @@ builder.Services.AddCors(cors =>
 //DB
 builder.Services.DbConecctionService(builder);
 builder.Services.MyCustomServices();
-builder.Services.AddSingleton<TokenGenerator>();
+//builder.Services.AddSingleton<TokenGenerator>();
 
 //Factory MiddleWares
 builder.Services.AddTransient<ApplicationJsonMiddleware>();
@@ -92,9 +118,9 @@ app.Use(async (context, next) =>
     await next(context);
 });
 
-app.MapPost("/GetToken", (Users user, TokenGenerator tokengenerator) =>
+/*app.MapPost("/GetToken", (Users user, TokenGenerator tokengenerator) =>
 {
     return tokengenerator.GenerateToken(user, builder.Configuration); 
-});
+});*/
 
 app.Run();

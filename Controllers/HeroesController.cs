@@ -28,8 +28,9 @@ namespace HeroesApi.Controllers
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<Heroes>> GetById(string id)
-        {
-            var hero = await _heroRepository.GetById(id);
+        {            
+              var hero = await _heroRepository.GetById(id);
+              
             if (hero == null)
             {
                 return NotFound();
@@ -38,8 +39,9 @@ namespace HeroesApi.Controllers
         }
         [HttpGet("suggest")]
         public async Task<ActionResult<IEnumerable<Heroes>>> GetSuggestion( string suggestion)
-        {
-            var suggest = await _heroRepository.GetSuggestion(suggestion);
+        {       
+             var suggest = await _heroRepository.GetSuggestion(suggestion);
+            
             if (!suggest.Any())
             {
                 return NotFound();
