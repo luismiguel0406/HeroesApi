@@ -11,6 +11,7 @@
         public  string ?Password { get; set; }
 
         public bool IsActive { get; set; }
+        public bool ?IsLogged { get; set; }       
 
         public Users()
         {

@@ -37,12 +37,12 @@ namespace HeroesApi.Controllers
             var ExistUser = await _userRepository.Login(user);
             if (ExistUser == null)
             {
-                return Unauthorized("Bad Credentials");
+                return Unauthorized();
             }
             var token = _tokenGenerator.GenerateToken(ExistUser, _configuration);
             Response.Headers.Authorization = $"Bearer {token}";
 
-            return Ok("Logged successfully");
+            return Ok();
         }
     }
 }
