@@ -1,5 +1,5 @@
 # Heroes api | .Net 8 API
-This api was built using techniques like repository pattern, generic repository to serve resources to [HeroesAPP](https://github.com/luismiguel0406/HeroesApi) with demostration purposes.  
+This api was built using techniques like repository pattern, generic repository to serve resources to [HeroesAPP](https://github.com/luismiguel0406/heroes-app) with demostration purposes.  
 
 ### Features
 - `Entity framework core` to access to SQL database.
