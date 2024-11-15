@@ -16,6 +16,7 @@
         public Users()
         {
             IsActive = true;
+            IsLogged = false;
         }
     }
 }

@@ -41,8 +41,11 @@ namespace HeroesApi.Controllers
             }
             var token = _tokenGenerator.GenerateToken(ExistUser, _configuration);
             Response.Headers.Authorization = $"Bearer {token}";
-
-            return Ok();
+            return Ok(new
+            {
+                token,
+                message = "Logged successfully",
+            });
         }
     }
 }
