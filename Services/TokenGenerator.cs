@@ -25,7 +25,7 @@ namespace HeroesApi.Services
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddMinutes(15),
-                Audience = "http://localhost:4200",// Itended web app to sent token
+                Audience = "http://localhost:4200",// Intended web app to sent token
                 Issuer = "http://localhost:5266", // Issuing token
                 SigningCredentials =
                 new SigningCredentials

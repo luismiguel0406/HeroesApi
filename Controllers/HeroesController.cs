@@ -2,6 +2,7 @@
 using HeroesApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace HeroesApi.Controllers
 {
@@ -11,10 +12,12 @@ namespace HeroesApi.Controllers
     public class HeroesController : ControllerBase
     {
         private readonly IHeroRepository _heroRepository;
+        private readonly IMemoryCache _cache;
 
-        public HeroesController(IHeroRepository heroRepository)
+        public HeroesController(IHeroRepository heroRepository, IMemoryCache cache)
         {
             _heroRepository = heroRepository;
+            _cache = cache; 
         }
 
         [HttpGet]
@@ -29,8 +32,14 @@ namespace HeroesApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Heroes>> GetById(string id)
         {            
-              var hero = await _heroRepository.GetById(id);
-              
+            if (!_cache.TryGetValue($"hero-{id}", out var hero)) { 
+            
+                hero = await _heroRepository.GetById(id);
+
+                //15 minutes for getting data from cache
+                _cache.Set($"hero-{id}", hero, TimeSpan.FromMinutes(15));
+            }               
+                         
             if (hero == null)
             {
                 return NotFound();
@@ -67,6 +76,8 @@ namespace HeroesApi.Controllers
 
             await _heroRepository.Delete(id);
             await _heroRepository.SaveChangesAsync();
+
+            _cache.Remove($"hero-{id}");
             return NoContent();
         }
 
@@ -75,6 +86,7 @@ namespace HeroesApi.Controllers
         {
             await _heroRepository.Update(id, hero); 
             await _heroRepository.SaveChangesAsync();
+            _cache.Remove($"hero-{id}");
             return NoContent();
         }   
     }
