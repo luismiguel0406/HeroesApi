@@ -12,4 +12,4 @@ This api was built using techniques like repository pattern, generic repository 
 - `Custom Middleware` to append information in header request.
 
 ### How To Run
-Clone the repository and start it.
+Take the `Heroes Script` file in the root of the project and execute in SQL server, after that, clone the repository and start it.
