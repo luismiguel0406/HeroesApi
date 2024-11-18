@@ -12,4 +12,4 @@ This api was built using techniques like repository pattern, generic repository 
 - `Custom Middleware` to append information in header request.
 
 ### How To Run
-Clone the repository and start it
+Clone the repository and start it.
