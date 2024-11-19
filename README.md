@@ -4,7 +4,7 @@ This api was built using techniques like repository pattern, generic repository 
 ### Features
 - `Entity framework core` to access to SQL database.
 - `Dependency injection` implemented in several parts of application.
-- `JWT bearer token` to authorize accessing to resorces.
+- `JWT bearer token` to authorize accessing to resources.
 - `Cache` made under implementation of `IMemoryCahe` interface as a service.
 - `CRUD Methods` in entity completely functional.
 - `Login flow` simulation.
